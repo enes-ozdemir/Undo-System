@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (selectedCard == null) return;
+
         selectedCard.transform.position = new Vector3(
             selectedCard.transform.position.x + Random.Range(-1f, 1f),
             selectedCard.transform.position.y + Random.Range(-1f, 1f),
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour
         selectedCard = card;
     }
 
-    public void DeselectCard()
+    public void DeSelectCard()
     {
         selectedCard.Deselected();
         selectedCard = null;

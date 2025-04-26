@@ -41,8 +41,6 @@ public class Stack : MonoBehaviour, IPointerClickHandler
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        // Move selected card here
-        Debug.Log("Stack clicked: " + gameObject.name);
         var card = gameManager.selectedCard;
         if (card != null && card.currentStack != this)
         {
@@ -50,7 +48,7 @@ public class Stack : MonoBehaviour, IPointerClickHandler
             gameManager.undoManager.ExecuteCommand(moveCommand);
             card.currentStack.RemoveCard(card);
             AddCard(card);
-            gameManager.DeselectCard();
+            gameManager.DeSelectCard();
         }
     }
     

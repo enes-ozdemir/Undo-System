@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,8 +5,8 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,IPointerClickHandler
 {
     public Stack currentStack;
-    public GameManager gameManager;
-    public UndoManager undoManager;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private UndoManager undoManager;
     private Vector3 _startPosition;
     private Transform _originalParent;
 
@@ -17,10 +16,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     private Image _cardImage;
     private bool _wasDragged;
 
-    private void Awake()
-    {
-        _cardImage = GetComponent<Image>();
-    }
+    private void Awake() => _cardImage = GetComponent<Image>();
 
     public void Selected() => _cardImage.color = Color.green;
 
@@ -35,7 +31,6 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             return;
         }
         _wasDragged = false;
-
         _isDragValid = true;
         _startPosition = transform.position;
         _originalParent = transform.parent;
@@ -110,11 +105,11 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             var selected = gameManager.selectedCard;
             var moveCommand = new MoveCardCommand(selected, selected.currentStack, currentStack);
             gameManager.undoManager.ExecuteCommand(moveCommand);
-            gameManager.DeselectCard();
+            gameManager.DeSelectCard();
         }
         else
         {
-            gameManager.DeselectCard();
+            gameManager.DeSelectCard();
         }
     }
 
