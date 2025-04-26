@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,IPointerClickHandler
 {
     public Stack currentStack;
     public GameManager gameManager;
@@ -10,6 +12,18 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     private Transform _originalParent;
 
     private bool _isDragValid;
+    private bool _isClicked;
+
+    public Image cardImage;
+
+    private void Awake()
+    {
+        cardImage = GetComponent<Image>();
+    }
+
+    public void Selected() => cardImage.color = Color.green;
+
+    public void Deselected() => cardImage.color = Color.white;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -67,4 +81,31 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             transform.SetParent(_originalParent);
         }
     }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (currentStack == null || currentStack.cards.Count == 0 || currentStack.cards[^1] != this)
+        {
+            Debug.Log("You can only click the last card of the stack.");
+            return;
+        }
+
+        if (gameManager.selectedCard == null)
+        {
+            gameManager.SelectCard(this);
+        }
+        else if (gameManager.selectedCard != this)
+        {
+            // Move the selected card to this card's stack
+            var selected = gameManager.selectedCard;
+            var moveCommand = new MoveCardCommand(selected, selected.currentStack, currentStack);
+            gameManager.undoManager.ExecuteCommand(moveCommand);
+            gameManager.DeselectCard();
+        }
+        else
+        {
+            gameManager.DeselectCard();
+        }
+    }
+
 }
