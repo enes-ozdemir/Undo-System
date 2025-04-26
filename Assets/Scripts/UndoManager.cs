@@ -3,25 +3,25 @@ using System.Collections.Generic;
 
 public class UndoManager : MonoBehaviour
 {
-    private Stack<ICommand> commandHistory = new Stack<ICommand>();
+    private readonly Stack<ICommand> _commandHistory = new Stack<ICommand>();
 
     public void ExecuteCommand(ICommand command)
     {
         command.Execute();
-        commandHistory.Push(command);
+        _commandHistory.Push(command);
     }
 
     public void Undo()
     {
-        if (commandHistory.Count > 0)
+        if (_commandHistory.Count > 0)
         {
-            ICommand lastCommand = commandHistory.Pop();
+            var lastCommand = _commandHistory.Pop();
             lastCommand.Undo();
         }
     }
 
     public void ClearHistory()
     {
-        commandHistory.Clear();
+        _commandHistory.Clear();
     }
 }

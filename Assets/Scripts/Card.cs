@@ -9,14 +9,17 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     private Vector3 _startPosition;
     private Transform _originalParent;
 
+    private bool _isDragValid;
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (currentStack.cards[^1] != this)
         {
             Debug.Log("You can only drag the last card of the stack.");
+            _isDragValid = false;
             return; 
         }
-
+        _isDragValid = true;
         _startPosition = transform.position;
         _originalParent = transform.parent;
         transform.SetParent(transform.root);
@@ -24,20 +27,31 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!_isDragValid)
+            return;
         transform.position = Input.mousePosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!_isDragValid)
+            return;
+        
         Stack targetStack = null;
         foreach (var stack in gameManager.stacks)
         {
-            if (RectTransformUtility.RectangleContainsScreenPoint(
-                stack.GetComponent<RectTransform>(), Input.mousePosition))
+            foreach (Transform child in stack.transform)
             {
-                targetStack = stack;
-                break;
+                if (RectTransformUtility.RectangleContainsScreenPoint(
+                        child.GetComponent<RectTransform>(), Input.mousePosition))
+                {
+                    targetStack = stack;
+                    break;
+                }
             }
+
+            if (targetStack != null)
+                break;
         }
 
         if (targetStack != null && targetStack != currentStack)
@@ -52,4 +66,5 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             transform.SetParent(_originalParent);
         }
     }
+
 }

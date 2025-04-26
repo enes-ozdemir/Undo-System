@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -11,7 +10,7 @@ public class Stack : MonoBehaviour
         for (int i = 0; i < cards.Count; i++)
         {
             cards[i].transform.SetParent(transform);
-            cards[i].transform.localPosition = new Vector3(0, -50 * i, 0); // Stagger visually
+            cards[i].transform.localPosition = new Vector3(0, -50 * i, 0);
             cards[i].currentStack = this;
         }
     }
@@ -22,7 +21,7 @@ public class Stack : MonoBehaviour
         card.transform.SetParent(transform);
         for (int i = 0; i < cards.Count; i++)
         {
-            cards[i].transform.localPosition = new Vector3(0, -50 * i, 0); // Stagger visually
+            cards[i].transform.localPosition = new Vector3(0, -50 * i, 0);
         }
         card.currentStack = this;
     }
