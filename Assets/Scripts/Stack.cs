@@ -4,30 +4,38 @@ using System.Collections.Generic;
 public class Stack : MonoBehaviour
 {
     public List<Card> cards = new List<Card>();
+    public List<Card> starterCards = new List<Card>();
 
     private void Start()
     {
-        for (int i = 0; i < cards.Count; i++)
+        foreach (var card in starterCards)
         {
-            cards[i].transform.SetParent(transform);
-            cards[i].transform.localPosition = new Vector3(0, -50 * i, 0);
-            cards[i].currentStack = this;
+            AddCard(card);
         }
     }
 
+
     public void AddCard(Card card)
     {
-        cards.Add(card);
         card.transform.SetParent(transform);
-        for (int i = 0; i < cards.Count; i++)
-        {
-            cards[i].transform.localPosition = new Vector3(0, -50 * i, 0);
-        }
+        card.transform.localPosition = Vector3.zero; // Reset before stacking
         card.currentStack = this;
+        cards.Add(card);
+
+        RepositionCards();
     }
 
     public void RemoveCard(Card card)
     {
         cards.Remove(card);
     }
+    
+    private void RepositionCards()
+    {
+        for (var i = 0; i < cards.Count; i++)
+        {
+            cards[i].transform.localPosition = new Vector3(0, -50f * i, 0);
+        }
+    }
+
 }

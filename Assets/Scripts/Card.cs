@@ -13,12 +13,13 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (currentStack.cards[^1] != this)
+        if (currentStack == null || currentStack.cards.Count == 0 || currentStack.cards[^1] != this)
         {
             Debug.Log("You can only drag the last card of the stack.");
             _isDragValid = false;
-            return; 
+            return;
         }
+
         _isDragValid = true;
         _startPosition = transform.position;
         _originalParent = transform.parent;
@@ -36,7 +37,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         if (!_isDragValid)
             return;
-        
+
         Stack targetStack = null;
         foreach (var stack in gameManager.stacks)
         {
@@ -66,5 +67,4 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             transform.SetParent(_originalParent);
         }
     }
-
 }
