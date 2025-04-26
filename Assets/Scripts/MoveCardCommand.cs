@@ -1,25 +1,25 @@
 public class MoveCardCommand : ICommand
 {
-    private Card card;
-    private Stack fromStack;
-    private Stack toStack;
+    private readonly Card _card;
+    private readonly Stack _fromStack;
+    private readonly Stack _toStack;
 
     public MoveCardCommand(Card card, Stack from, Stack to)
     {
-        this.card = card;
-        fromStack = from;
-        toStack = to;
+        _card = card;
+        _fromStack = from;
+        _toStack = to;
     }
 
     public void Execute()
     {
-        fromStack.RemoveCard(card);
-        toStack.AddCard(card);
+        _fromStack.RemoveCard(_card);
+        _toStack.AddCard(_card);
     }
 
     public void Undo()
     {
-        toStack.RemoveCard(card);
-        fromStack.AddCard(card);
+        _toStack.RemoveCard(_card);
+        _fromStack.AddCard(_card);
     }
 } 

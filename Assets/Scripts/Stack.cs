@@ -6,7 +6,7 @@ public class Stack : MonoBehaviour, IPointerClickHandler
 {
     public List<Card> cards = new List<Card>();
     public List<Card> starterCards = new List<Card>();
-    public GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
 
     private void Start()
     {

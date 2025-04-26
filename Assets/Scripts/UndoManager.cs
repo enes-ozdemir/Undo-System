@@ -19,9 +19,4 @@ public class UndoManager : MonoBehaviour
             lastCommand.Undo();
         }
     }
-
-    public void ClearHistory()
-    {
-        _commandHistory.Clear();
-    }
 }
