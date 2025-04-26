@@ -14,16 +14,17 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     private bool _isDragValid;
     private bool _isClicked;
 
-    public Image cardImage;
+    private Image _cardImage;
+    private bool _wasDragged;
 
     private void Awake()
     {
-        cardImage = GetComponent<Image>();
+        _cardImage = GetComponent<Image>();
     }
 
-    public void Selected() => cardImage.color = Color.green;
+    public void Selected() => _cardImage.color = Color.green;
 
-    public void Deselected() => cardImage.color = Color.white;
+    public void Deselected() => _cardImage.color = Color.white;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -33,6 +34,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             _isDragValid = false;
             return;
         }
+        _wasDragged = false;
 
         _isDragValid = true;
         _startPosition = transform.position;
@@ -44,6 +46,8 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         if (!_isDragValid|| _isClicked)
             return;
+        
+        _wasDragged = true;
         transform.position = Input.mousePosition;
     }
 
@@ -84,6 +88,12 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (_wasDragged)
+        {
+            _wasDragged = false;
+            return;
+        }
+        
         if (currentStack == null || currentStack.cards.Count == 0 || currentStack.cards[^1] != this)
         {
             Debug.Log("You can only click the last card of the stack.");
