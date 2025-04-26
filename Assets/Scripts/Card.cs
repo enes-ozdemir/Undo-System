@@ -27,9 +27,9 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (currentStack == null || currentStack.cards.Count == 0 || currentStack.cards[^1] != this)
+        if (currentStack == null || currentStack.cards.Count == 0 || currentStack.cards[^1] != this || _isClicked)
         {
-            Debug.Log("You can only drag the last card of the stack.");
+            Debug.Log("You can only drag the last unClicked card of the stack.");
             _isDragValid = false;
             return;
         }
@@ -42,14 +42,14 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (!_isDragValid)
+        if (!_isDragValid|| _isClicked)
             return;
         transform.position = Input.mousePosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (!_isDragValid)
+        if (!_isDragValid || _isClicked)
             return;
 
         Stack targetStack = null;
